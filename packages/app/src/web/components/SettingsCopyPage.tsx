@@ -46,6 +46,19 @@ interface ClientConfig {
 	};
 }
 
+const GooseIcon = ({ className }: { className?: string }) => (
+	<svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+		<circle cx="50" cy="50" r="50" fill="#1a1a1a" />
+		<ellipse cx="50" cy="58" rx="22" ry="17" fill="#ffffff" />
+		<ellipse cx="50" cy="42" rx="13" ry="14" fill="#ffffff" />
+		<ellipse cx="56" cy="36" rx="6" ry="5" fill="#ffffff" />
+		<polygon points="62,36 74,33 68,40" fill="#f5a623" />
+		<circle cx="59" cy="33" r="2" fill="#1a1a1a" />
+		<ellipse cx="38" cy="72" rx="8" ry="4" fill="#f5a623" />
+		<ellipse cx="57" cy="74" rx="8" ry="4" fill="#f5a623" />
+	</svg>
+);
+
 const CLIENT_CONFIGS: ClientConfig[] = [
 	{
 		id: 'claude',
@@ -829,6 +842,97 @@ args = ["-y", "mcp-remote@latest", "https://huggingface.co/mcp?login"]`,
 				variant: 'outline',
 			},
 		],
+	},
+	{
+		id: 'goose',
+		name: 'Goose',
+		icon: <GooseIcon className="h-5 w-5" />,
+		instructions: [
+			{
+				type: 'text',
+				content: (
+					<a
+						href="goose://extension/add/eyJ0eXBlIjoiU3RyZWFtYWJsZUh0dHAiLCJuYW1lIjoiaHVnZ2luZ2ZhY2UiLCJ1cmkiOiJodHRwczovL2h1Z2dpbmdmYWNlLmNvL21jcD9sb2dpbiJ9"
+						className="inline-flex items-center space-x-2 border border-border rounded-lg p-2 hover:bg-accent/10 transition-colors duration-200"
+					>
+						<GooseIcon className="h-8 w-8 hover:scale-105 transition-transform duration-200" />
+						<span className="text-sm font-medium">Add to Goose</span>
+					</a>
+				),
+			},
+			{
+				type: 'text',
+				content: 'Click to add the Hugging Face MCP server to Goose Desktop (requires Goose Desktop to be installed).',
+			},
+		],
+		actionButtons: [
+			{
+				type: 'external',
+				label: 'Goose Docs',
+				url: 'https://block.github.io/goose/',
+				variant: 'outline',
+			},
+		],
+		manualConfig: {
+			title: 'Manual Configuration / Using a READ HF_TOKEN instead of OAuth:',
+			steps: [
+				{
+					type: 'text',
+					content: (
+						<span>
+							Add the following to your Goose configuration file at{' '}
+							<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">~/.config/goose/config.yaml</code>:
+						</span>
+					),
+				},
+				{
+					type: 'code',
+					content: `extensions:
+  - type: streamable_http
+    name: huggingface
+    description: "Hugging Face MCP Server"
+    uri: "https://huggingface.co/mcp"
+    headers:
+      Authorization: "Bearer <HF_TOKEN>"
+    enabled: true`,
+					copyable: true,
+				},
+				{
+					type: 'text',
+					content: (
+						<span>
+							Replace <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">&lt;HF_TOKEN&gt;</code> with your
+							Hugging Face API Token.
+						</span>
+					),
+				},
+				{
+					type: 'text',
+					content: (
+						<span>
+							You can also run a Goose recipe that uses the Hugging Face MCP server. Save the following as{' '}
+							<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">hf-assistant.yaml</code> and run with{' '}
+							<code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">goose run --recipe hf-assistant.yaml</code>:
+						</span>
+					),
+				},
+				{
+					type: 'code',
+					content: `version: 1.0.0
+title: "Hugging Face Assistant"
+description: "An AI assistant with access to Hugging Face Hub"
+instructions: |
+  You have access to Hugging Face Hub tools. Use them to help
+  users discover models, datasets, spaces, and documentation.
+extensions:
+  - type: streamable_http
+    name: huggingface
+    uri: "https://huggingface.co/mcp?login"
+    enabled: true`,
+					copyable: true,
+				},
+			],
+		},
 	},
 ];
 
