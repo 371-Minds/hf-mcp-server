@@ -104,6 +104,43 @@ If you prefer to use configure manually or specify an Authorization Token, use t
 ```
 </details>
 
+<details>
+<summary>Install in <b>Goose</b></summary>
+<br />
+
+Click <a href="goose://extension/add/eyJ0eXBlIjoiU3RyZWFtYWJsZUh0dHAiLCJuYW1lIjoiaHVnZ2luZ2ZhY2UiLCJ1cmkiOiJodHRwczovL2h1Z2dpbmdmYWNlLmNvL21jcD9sb2dpbiJ9">here</a> to add the Hugging Face MCP Server to <b>Goose Desktop</b>.
+
+To configure manually or use a READ HF_TOKEN, add the following to your `~/.config/goose/config.yaml`:
+
+```yaml
+extensions:
+  - type: streamable_http
+    name: huggingface
+    description: "Hugging Face MCP Server"
+    uri: "https://huggingface.co/mcp"
+    headers:
+      Authorization: "Bearer <YOUR_HF_TOKEN>"
+    enabled: true
+```
+
+You can also run the Hugging Face assistant as a Goose recipe. Save the following as `hf-assistant.yaml` and run `goose run --recipe hf-assistant.yaml`:
+
+```yaml
+version: 1.0.0
+title: "Hugging Face Assistant"
+description: "An AI assistant with access to Hugging Face Hub"
+instructions: |
+  You have access to Hugging Face Hub tools. Use them to help
+  users discover models, datasets, spaces, and documentation.
+extensions:
+  - type: streamable_http
+    name: huggingface
+    uri: "https://huggingface.co/mcp?login"
+    enabled: true
+```
+
+</details>
+
 Once installed, navigate to https://huggingface.co/settings/mcp to configure your Tools and Spaces.
 
 > [!TIP]
